@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import cors from "cors"
 import { connectDB } from "./src/config/db.js";
 import errorMiddleware from "./src/middlewares/error.middleware.js";
 import authRoutes from "./src/modules/auth/auth.route.js";
@@ -14,6 +15,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true              
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
