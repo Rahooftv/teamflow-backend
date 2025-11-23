@@ -22,4 +22,12 @@ export const UserModel = {
     const { rows } = await pool.query(query, [name, email, password, role]);
     return rows[0];
   },
+
+   getAllMembers: async () => {
+    const query = "SELECT id, name, email, role FROM users WHERE role = 'MEMBER' ORDER BY name ASC";
+    const { rows } = await pool.query(query);
+    return rows;
+  },
+
 };
+
