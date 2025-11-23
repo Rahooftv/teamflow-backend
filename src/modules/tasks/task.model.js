@@ -1,4 +1,4 @@
-import {pool}  from "../../config/db.js"
+import { pool } from "../../config/db.js";
 
 export const TaskModel = {
   getByProject: async (projectId) => {
@@ -24,53 +24,60 @@ export const TaskModel = {
     return rows[0];
   },
 
- create: async ({ project_id, title, description, status, priority, assignee_id, position }) => {
-  const query = `
-      INSERT INTO tasks (project_id, title, description, status, priority, assignee_id, position)
-      VALUES ($1, $2, $3, $4, $5, $6, $7) 
-      RETURNING *`;
-  
-  const { rows } = await pool.query(query, [
+  create: async ({
     project_id,
     title,
     description,
     status,
     priority,
     assignee_id,
-    position || 0
-  ]);
+    position,
+  }) => {
+    const query = `
+      INSERT INTO tasks (project_id, title, description, status, priority, assignee_id, position)
+      VALUES ($1, $2, $3, $4, $5, $6, $7) 
+      RETURNING *`;
 
-  return rows[0];
-},
+    const { rows } = await pool.query(query, [
+      project_id,
+      title,
+      description,
+      status,
+      priority,
+      assignee_id,
+      position || 0,
+    ]);
 
- update: async (id, data) => {
-  const fields = [];
-  const values = [];
+    return rows[0];
+  },
 
-  Object.entries(data).forEach(([key, value], index) => {
-    if (value !== undefined) {
-      fields.push(`${key} = $${index + 1}`);
-      values.push(value);
+  update: async (id, data) => {
+    const fields = [];
+    const values = [];
+
+    Object.entries(data).forEach(([key, value], index) => {
+      if (value !== undefined) {
+        fields.push(`${key} = $${index + 1}`);
+        values.push(value);
+      }
+    });
+
+    if (fields.length === 0) {
+      throw new AppError("No valid fields to update", 400);
     }
-  });
 
-  if (fields.length === 0) {
-    throw new AppError("No valid fields to update", 400);
-  }
-
-  const query = `
+    const query = `
       UPDATE tasks 
       SET ${fields.join(", ")}
       WHERE id = $${values.length + 1}
       RETURNING *;
   `;
 
-  values.push(id);
+    values.push(id);
 
-  const { rows } = await pool.query(query, values);
-  return rows[0];
-},
-
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+  },
 
   updatePosition: async (id, position, status) => {
     const query = `

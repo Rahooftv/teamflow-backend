@@ -4,22 +4,22 @@ import { UserModel } from "../users/user.model.js";
 import AppError from "../../utils/app.error.js";
 
 export const AuthService = {
-
   login: async (email, password) => {
-   
-    const user = await UserModel.findByEmail(email)
+    const user = await UserModel.findByEmail(email);
     if (!user) {
-       throw new AppError("Invalid email or password", 401)
+      throw new AppError("Invalid email or password", 401);
     }
 
- 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-       throw new AppError("Invalid email or password", 401)
+      throw new AppError("Invalid email or password", 401);
     }
 
- 
-    const token = jwt.sign( { id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" } )
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     return {
       token,
@@ -32,10 +32,9 @@ export const AuthService = {
     };
   },
 
-
   getMe: async (userId) => {
     const user = await UserModel.findById(userId);
-    if (!user) throw new AppError("User not found", 404)
+    if (!user) throw new AppError("User not found", 404);
     return {
       id: user.id,
       name: user.name,

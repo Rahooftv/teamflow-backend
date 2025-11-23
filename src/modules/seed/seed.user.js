@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import { UserModel } from "../users/user.model.js";
-import {pool} from "../../config/db.js";
+import { pool } from "../../config/db.js";
 
 const seedUsers = async () => {
   try {
@@ -35,4 +35,4 @@ const seedUsers = async () => {
   }
 };
 
-seedUsers()
+seedUsers();

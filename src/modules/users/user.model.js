@@ -1,5 +1,4 @@
-import {pool}  from "../../config/db.js"
-
+import { pool } from "../../config/db.js";
 
 export const UserModel = {
   findByEmail: async (email) => {
@@ -23,11 +22,10 @@ export const UserModel = {
     return rows[0];
   },
 
-   getAllMembers: async () => {
-    const query = "SELECT id, name, email, role FROM users WHERE role = 'MEMBER' ORDER BY name ASC";
+  getAllMembers: async () => {
+    const query =
+      "SELECT id, name, email, role FROM users WHERE role = 'MEMBER' ORDER BY name ASC";
     const { rows } = await pool.query(query);
     return rows;
   },
-
 };
-
