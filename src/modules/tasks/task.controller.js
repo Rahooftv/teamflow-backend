@@ -3,23 +3,26 @@ import AppError from "../../utils/app.error.js";
 
 export const TaskController = {
 
- getTasksByProject: async (req, res, next) => {
+getTasksByProject: async (req, res, next) => {
   try {
     const projectId = parseInt(req.params.projectId);
+    if (isNaN(projectId)) throw new AppError("Invalid project ID", 400);
 
-    if (isNaN(projectId)) {
-      throw new AppError("Invalid project ID", 400);
-    }
+    const filters = {
+      search: req.query.search || null,
+      status: req.query.status || null,
+      priority: req.query.priority || null,
+      assignee: req.query.assignee || null,
+    };
 
-    const user = req.user;
-
-    const tasks = await TaskService.getTasksByProject(projectId, user);
+    const tasks = await TaskService.getTasksByProject(projectId, req.user, filters);
 
     res.status(200).json({ tasks });
   } catch (err) {
     next(err);
   }
 },
+
 
   getTaskById: async (req, res, next) => {
     try {
@@ -52,15 +55,21 @@ createTask: async (req, res, next) => {
   }
 },
 
-  updateTask: async (req, res, next) => {
+updateTask: async (req, res, next) => {
 
-    try {
-      const task = await TaskService.updateTask(req.params.id, req.body, req.user);
-      res.status(200).json({ task });
-    } catch (err) {
-      next(err)
-    }
-  },
+  try {
+    const task = await TaskService.updateTask(
+      req.params.id,
+      req.body,
+      req.user
+    );
+
+    res.status(200).json({ task })
+  } catch (err) {
+    next(err);
+  }
+},
+
 
 
   updateTaskPosition: async (req, res, next) => {

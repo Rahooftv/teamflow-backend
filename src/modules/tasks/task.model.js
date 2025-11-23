@@ -43,14 +43,34 @@ export const TaskModel = {
   return rows[0];
 },
 
-  update: async (id, { title, description, status, priority, assignee_id }) => {
-    const query = `
-      UPDATE tasks
-      SET title=$1, description=$2, status=$3, priority=$4, assignee_id=$5
-      WHERE id=$6 RETURNING *`;
-    const { rows } = await pool.query(query, [title, description, status, priority, assignee_id, id]);
-    return rows[0];
-  },
+ update: async (id, data) => {
+  const fields = [];
+  const values = [];
+
+  Object.entries(data).forEach(([key, value], index) => {
+    if (value !== undefined) {
+      fields.push(`${key} = $${index + 1}`);
+      values.push(value);
+    }
+  });
+
+  if (fields.length === 0) {
+    throw new AppError("No valid fields to update", 400);
+  }
+
+  const query = `
+      UPDATE tasks 
+      SET ${fields.join(", ")}
+      WHERE id = $${values.length + 1}
+      RETURNING *;
+  `;
+
+  values.push(id);
+
+  const { rows } = await pool.query(query, values);
+  return rows[0];
+},
+
 
   updatePosition: async (id, position, status) => {
     const query = `

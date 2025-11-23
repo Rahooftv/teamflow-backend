@@ -1,3 +1,4 @@
+import AppError from "../utils/app.error.js";
 
 export const adminOnly = (req, res, next) => {
   if (req.user.role !== "ADMIN") {
