@@ -1,6 +1,7 @@
 import pool  from "../../config/db.js"
 
 export const TaskModel = {
+    
   getByProject: async (projectId) => {
     const query = `
       SELECT t.*, u.name AS assignee_name

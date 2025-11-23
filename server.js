@@ -5,6 +5,8 @@ import { connectDB } from "./src/config/db.js"
 import errorMiddleware from "./src/middlewares/error.middleware.js"
 import authRoutes from "./src/modules/auth/auth.route.js"
 import userRoutes from "./src/modules/users/user.route.js"
+import projectRoutes from "./src/modules/projects/project.routes.js"
+
 dotenv.config(); 
 
 const app = express()
@@ -14,6 +16,7 @@ app.use(cookieParser())
 
 app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
+app.use("/api/projects",projectRoutes)
 
 app.use(errorMiddleware)
 

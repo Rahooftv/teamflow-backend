@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../users/user.model.js";
+import AppError from "../../utils/app.error.js";
 
 export const AuthService = {
 
