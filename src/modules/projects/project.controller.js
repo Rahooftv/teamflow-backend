@@ -19,7 +19,7 @@ export const ProjectController = {
 
     try {
       const project = await ProjectService.getProjectById(req.params.id)
-      if (!project) return res.status(404).json({ message: "Project not found" })
+      if (!project)  throw new AppError("Project not found", 404)
       res.status(200).json({ project })
     } catch (err) {
       next(err);

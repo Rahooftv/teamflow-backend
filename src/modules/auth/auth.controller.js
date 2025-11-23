@@ -13,11 +13,11 @@ export const AuthController = {
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-       maxAge: 1 * 24 * 60 * 60 * 1000 
+        maxAge: 1 * 24 * 60 * 60 * 1000 
 
       })
 
-      res.status(200).json({ user });
+      res.status(200).json({ user })
     } catch (err) {
       next(err);
     }
@@ -27,7 +27,7 @@ export const AuthController = {
 me: async (req, res, next) => {
   try {
     const user = await AuthService.getMe(req.user.id); 
-    res.status(200).json({ user });
+    res.status(200).json({ user })
   } catch (err) {
     next(err);
   }
