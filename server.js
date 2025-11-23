@@ -6,6 +6,7 @@ import errorMiddleware from "./src/middlewares/error.middleware.js"
 import authRoutes from "./src/modules/auth/auth.route.js"
 import userRoutes from "./src/modules/users/user.route.js"
 import projectRoutes from "./src/modules/projects/project.routes.js"
+import taskRoutes from "./src/modules/tasks/task.route.js"
 
 dotenv.config(); 
 
@@ -17,8 +18,11 @@ app.use(cookieParser())
 app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
 app.use("/api/projects",projectRoutes)
+app.use("/api",taskRoutes)
 
 app.use(errorMiddleware)
+
+
 
 const PORT = process.env.PORT
 

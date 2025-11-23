@@ -33,4 +33,22 @@ me: async (req, res, next) => {
   }
 },
 
+  logout: async (req, res, next) => {
+
+    try {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,    
+        sameSite: "none",
+      });
+
+      res.status(200).json({
+        status: "success",
+        message: "Logged out successfully",
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+
 }
