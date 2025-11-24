@@ -3,7 +3,7 @@ import { TaskController } from "./task.controller.js";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { adminOnly } from "../../middlewares/admin.middleware.js";
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true })
 
 router.get(
   "/projects/:projectId/tasks",
